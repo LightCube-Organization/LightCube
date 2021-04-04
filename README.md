@@ -1,6 +1,6 @@
 # lightcube
 
- LightCube,A perfect solution for programming lessons in school.
+ LightCube,A perfect solution for programming lessons in school
 
 ## Getting Started
 
