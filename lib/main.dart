@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, this.title = "sample"}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double size_width = MediaQuery.of(context).size.width;
+    // final double size_width = MediaQuery.of(context).size.width;
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: InputDecoration(labelText: 'id'),
               textInputAction: TextInputAction.next,
               validator: (value) {
-                if (value.isEmpty) {
+                if (isEmpty(value!)) {
                   return 'Please provide a value.';
                 }
                 if (value.length <= 4) {
@@ -134,4 +134,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+Widget addLeadingIcon() {
+  return new Container(
+    padding: EdgeInsets.only(left: 10),
+    height: 50.0,
+    width: 50.0,
+    child: new Stack(
+      alignment: AlignmentDirectional.center,
+      children: <Widget>[
+        new Image.asset(
+          'images/logo.png',
+          width: 50.0,
+          height: 50.0,
+        )
+      ],
+    ),
+  );
+}
+
+bool isEmpty(String s) {
+  return s.isEmpty;
 }
