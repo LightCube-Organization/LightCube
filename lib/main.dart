@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,8 +26,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, this.title = "sample"}) : super(key: key);
@@ -55,9 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter= _counter * 10;
+      _counter = _counter * 10;
     });
   }
+
+  bool _showPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,64 +96,97 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'Login',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+//            Text(
+//              '$_counter',
+//              style: Theme.of(context).textTheme.headline4,
+//            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 300, vertical: 16),
+              child: TextFormField(
+                decoration: InputDecoration(labelText: 'ID:'),
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  if (isEmpty(value!)) {
+                    return 'Please provide a value.';
+                  }
+                  if (value.length <= 4) {
+                    return 'id must be longer than 4 characters.';
+                  }
+                  if (16 < value.length) {
+                    return 'id must be less than 16 characters.';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'no';
+                  }
+                  return null;
+                },
+              ),
             ),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 300,vertical: 16),
-            child:
-                TextFormField(
-              decoration: InputDecoration(labelText: 'id'),
-              textInputAction: TextInputAction.next,
-              validator: (value) {
-                if (isEmpty(value!)) {
-                  return 'Please provide a value.';
-                }
-                if (value.length <= 4) {
-                  return 'id must be longer than 4 characters.';
-                }
-                if (16 < value.length) {
-                  return 'id must be less than 16 characters.';
-                }
-                if (int.tryParse(value) == null) {
-                  return 'no';
-                }
-                return null;
-              },
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 300, vertical: 16),
+              child: TextFormField(
+                obscureText: !_showPassword,
+                decoration: InputDecoration(
+                    labelText: "password",
+                    suffixIcon: IconButton(
+                      icon: Icon(_showPassword
+                          ? FontAwesomeIcons.solidEye
+                          : FontAwesomeIcons.solidEyeSlash),
+                      onPressed: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      },
+                    )),
+                textInputAction: TextInputAction.done,
+                validator: (value) {
+                  if (isEmpty(value!)) {
+                    return 'Please provide a value.';
+                  }
+                  if (value.length <= 4) {
+                    return 'id must be longer than 4 characters.';
+                  }
+                  if (16 < value.length) {
+                    return 'id must be less than 16 characters.';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'no';
+                  }
+                  return null;
+                },
+              ),
             )
-              ,)
-
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+//      floatingActionButton: FloatingActionButton(
+//        onPressed: _incrementCounter,
+//        tooltip: 'Increment',
+//        child: Icon(Icons.add),
+//    ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
 
-Widget addLeadingIcon() {
-  return new Container(
-    padding: EdgeInsets.only(left: 10),
-    height: 50.0,
-    width: 50.0,
-    child: new Stack(
-      alignment: AlignmentDirectional.center,
-      children: <Widget>[
-        new Image.asset(
-          'images/logo.png',
-          width: 50.0,
-          height: 50.0,
-        )
-      ],
-    ),
-  );
-}
+//Widget addLeadingIcon() {
+//  return new Container(
+//    padding: EdgeInsets.only(left: 10),
+//    height: 50.0,
+//    width: 50.0,
+//    child: new Stack(
+//      alignment: AlignmentDirectional.center,
+//      children: <Widget>[
+//        new Image.asset(
+//          'images/logo.png',
+//          width: 50.0,
+//          height: 50.0,
+//        )
+//      ],
+//    ),
+//  );
+//}
 
 bool isEmpty(String s) {
   return s.isEmpty;
