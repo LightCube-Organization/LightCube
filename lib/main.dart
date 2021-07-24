@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -47,10 +46,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-enum FormType {
-  login,
-  register
-}
+enum FormType { login, register }
 
 class _LoginPageState extends State<LoginPage> {
   FormType? _formType = FormType.login;
@@ -71,140 +67,128 @@ class _LoginPageState extends State<LoginPage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          child: new Form(
-            key: formKey,
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Login or Register',
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 500, vertical: 0),
-                  child:
-                    RadioListTile<FormType>(
-                      title: Text("Login"),
-                      activeColor: Colors.blue,
-                      value: FormType.login,
-                      groupValue: _formType,
-                      onChanged: moveToValue,
-                    ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 500, vertical: 0),
-                  child:
-                    RadioListTile<FormType>(
-                      title: Text("Register"),
-                      activeColor: Colors.blue,
-                      value: FormType.register,
-                      groupValue: _formType,
-                      onChanged: moveToValue,
-                    ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 300, vertical: 16),
-                  child:
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'ID:'),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (isEmpty(value!)) {
-                        return 'Please provide a value.';
-                      }
-                      if (value.length <= 4) {
-                        return 'id must be longer than 4 characters.';
-                      }
-                      if (16 < value.length) {
-                        return 'id must be less than 16 characters.';
-                      }
-                      if (int.tryParse(value) == null) {
-                        return 'no';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) => _email = "$value@lccs.ml",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 300, vertical: 16),
-                  child: TextFormField(
-                    obscureText: !_showPassword,
-                    decoration: InputDecoration(
-                        labelText: "password",
-                        suffixIcon: IconButton(
-                          icon: Icon(_showPassword
-                              ? FontAwesomeIcons.solidEye
-                              : FontAwesomeIcons.solidEyeSlash),
-                          onPressed: () {
-                            setState(() {
-                              _showPassword = !_showPassword;
-                            });
-                          },
-                        )),
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (isEmpty(value!)) {
-                        return 'Please provide a value.';
-                      }
-                      if (value.length <= 4) {
-                        return 'id must be longer than 4 characters.';
-                      }
-                      if (16 < value.length) {
-                        return 'id must be less than 16 characters.';
-                      }
-                      if (int.tryParse(value) == null) {
-                        return 'no';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) => _password = "$value",
-                  ),
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(20.0)),
-                  ),
-                  child: Text("Submit"),
-                  onPressed: validateAndSubmit,
-                ),
-              ],
+        body: Container(
+            margin: EdgeInsets.symmetric(
+              horizontal: 50.0,
             ),
-          ),
-        )
-    );
+            child: new Form(
+              key: formKey,
+              child: Center(
+                child: new Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Login or Register',
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 400.0),
+                            child: RadioListTile<FormType>(
+                              title: Text("Login"),
+                              activeColor: Colors.blue,
+                              value: FormType.login,
+                              groupValue: _formType,
+                              onChanged: moveToValue,
+                            ))),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 400.0),
+                            child: RadioListTile<FormType>(
+                              title: Text("Register"),
+                              activeColor: Colors.blue,
+                              value: FormType.register,
+                              groupValue: _formType,
+                              onChanged: moveToValue,
+                            ))),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20.0,
+                        ),
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 700.0),
+                            child: TextFormField(
+                              decoration: InputDecoration(labelText: 'ID'),
+                              textInputAction: TextInputAction.next,
+                              validator: (value) {
+                                if (isEmpty(value!)) {
+                                  return 'Please provide a value.';
+                                }
+                                if (value.length <= 4) {
+                                  return 'id must be longer than 4 characters.';
+                                }
+                                if (16 < value.length) {
+                                  return 'id must be less than 16 characters.';
+                                }
+                                if (int.tryParse(value) == null) {
+                                  return 'Only numbers can be used as ID.';
+                                }
+                                return null;
+                              },
+                              // lccs.mlでなくてよい
+                              onSaved: (value) => _email = "$value@lccs.ml",
+                            ))),
+                    ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 700.0),
+                        child: TextFormField(
+                          obscureText: !_showPassword,
+                          decoration: InputDecoration(
+                              labelText: "Password",
+                              suffixIcon: IconButton(
+                                icon: Icon(_showPassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                                onPressed: () {
+                                  setState(() {
+                                    _showPassword = !_showPassword;
+                                  });
+                                },
+                              )),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (isEmpty(value!)) {
+                              return 'Please provide a value.';
+                            }
+                            if (value.length <= 4) {
+                              return 'ID must be longer than 4 characters.';
+                            }
+                            if (16 < value.length) {
+                              return 'ID must be less than 16 characters.';
+                            }
+                            if (int.tryParse(value) == null) {
+                              return 'Only numbers can be used as passwords.';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) => _password = "$value",
+                        )),
+                    Padding(
+                        padding: EdgeInsets.all(30),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue),
+                            padding:
+                                MaterialStateProperty.all(EdgeInsets.all(20.0)),
+                          ),
+                          child: Text("Submit"),
+                          onPressed: validateAndSubmit,
+                        )),
+                  ],
+                ),
+              ),
+            )));
   }
 
   final formKey = new GlobalKey<FormState>();
 
   String _email = "";
   String _password = "";
-  String _state = "";
 
   bool validateAndSave() {
     final form = formKey.currentState;
-    if(form!.validate()) {
+    if (form!.validate()) {
       form.save();
       // デバッグ用
       print('Form is valid. Email: $_email, password: $_password');
@@ -216,17 +200,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void validateAndSubmit() async {
-    if(validateAndSave()){
+    if (validateAndSave()) {
       try {
-        if(_formType == FormType.login) {
-          UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+        if (_formType == FormType.login) {
+          UserCredential user = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: _email, password: _password);
           print('Singed in: ${user.user}');
         } else {
-          UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+          UserCredential user = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+                  email: _email, password: _password);
           print('Registered User: ${user.user}');
         }
-      }
-      catch(e) {
+      } catch (e) {
         print('Error: $e');
       }
     }
@@ -238,7 +224,6 @@ class _LoginPageState extends State<LoginPage> {
       print(value);
     });
   }
-
 }
 
 bool isEmpty(String s) {
