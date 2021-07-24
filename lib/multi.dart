@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './main.dart';
 
 class Multi extends StatelessWidget {
   @override
@@ -9,7 +8,6 @@ class Multi extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('LightCube'),
-          leading: addLeadingIcon(),
         ),
         body: Center(
           child: const Text('Multi'),

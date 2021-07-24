@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './main.dart';
 
 class Single extends StatelessWidget {
   @override
@@ -9,7 +8,6 @@ class Single extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('LightCube'),
-          leading: addLeadingIcon(),
         ),
         body: GridView.count( // Grid表示
           crossAxisCount: 3, // 横列
