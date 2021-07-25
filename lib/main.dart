@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './home.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,15 +11,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'LightCube Start Page',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -29,16 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key, this.title = "sample"}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  LoginPage({Key? key,  required this.title}) : super(key: key);
 
   final String title;
 
@@ -54,13 +36,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final double size_width = MediaQuery.of(context).size.width;
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
+    // ページロード時にログイン判定を追加、ログイン状態ならhome.dartに移動
+
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -116,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                                   return 'Please provide a value.';
                                 }
                                 if (value.length <= 4) {
-                                  return 'id must be longer than 4 characters.';
+                                  return 'ID must be longer than 4 characters.';
                                 }
                                 if (16 < value.length) {
-                                  return 'id must be less than 16 characters.';
+                                  return 'ID must be less than 16 characters.';
                                 }
                                 if (int.tryParse(value) == null) {
                                   return 'Only numbers can be used as ID.';
@@ -150,11 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                             if (isEmpty(value!)) {
                               return 'Please provide a value.';
                             }
-                            if (value.length <= 4) {
-                              return 'ID must be longer than 4 characters.';
-                            }
-                            if (16 < value.length) {
-                              return 'ID must be less than 16 characters.';
+                            if (value.length <= 6) {
+                              return 'Password must be longer than 6 characters.';
                             }
                             if (int.tryParse(value) == null) {
                               return 'Only numbers can be used as passwords.';
@@ -175,6 +150,16 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text("Submit"),
                           onPressed: validateAndSubmit,
                         )),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.blue),
+                        padding:
+                        MaterialStateProperty.all(EdgeInsets.all(20.0)),
+                      ),
+                      child: Text("Go to"),
+                      onPressed: test,
+                    ),
                   ],
                 ),
               ),
@@ -206,16 +191,22 @@ class _LoginPageState extends State<LoginPage> {
           UserCredential user = await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: _email, password: _password);
           print('Singed in: ${user.user}');
+          Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage()),(_) => false);
         } else {
           UserCredential user = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
                   email: _email, password: _password);
           print('Registered User: ${user.user}');
+          Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage()),(_) => false);
         }
       } catch (e) {
         print('Error: $e');
       }
     }
+  }
+
+  void test() {
+    Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage()),(_) => false);
   }
 
   void moveToValue(value) {
