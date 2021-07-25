@@ -150,16 +150,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text("Submit"),
                           onPressed: validateAndSubmit,
                         )),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all(Colors.blue),
-                        padding:
-                        MaterialStateProperty.all(EdgeInsets.all(20.0)),
-                      ),
-                      child: Text("Go to"),
-                      onPressed: test,
-                    ),
                   ],
                 ),
               ),
@@ -203,10 +193,6 @@ class _LoginPageState extends State<LoginPage> {
         print('Error: $e');
       }
     }
-  }
-
-  void test() {
-    Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage()),(_) => false);
   }
 
   void moveToValue(value) {
