@@ -31,8 +31,10 @@ class LoginPage extends StatefulWidget {
 enum FormType { login, register }
 
 class _LoginPageState extends State<LoginPage> {
+
   FormType? _formType = FormType.login;
   bool _showPassword = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +175,8 @@ class _LoginPageState extends State<LoginPage> {
     print('Form is Invalid. Email: $_email, password: $_password');
     return false;
   }
+
+  // ログイン状態の保存を追加
 
   void validateAndSubmit() async {
     if (validateAndSave()) {
