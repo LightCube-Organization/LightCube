@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase/supabase.dart';
 import 'package:settings_ui/settings_ui.dart';
+import '../main.dart';
+import '../utils/constants.dart';
+import '../components/auth_state.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key,}) : super(key: key);
+  HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -13,10 +18,6 @@ class _HomePageState extends State<HomePage> {
   var select = ['Single', 'Multi', 'Settings'];
 
   final navigatorKey = GlobalKey<NavigatorState>();
-
-  bool isMenuFixed(BuildContext context) {
-    return MediaQuery.of(context).size.width > 800;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,6 @@ class _HomePageState extends State<HomePage> {
 
     return Row(
       children: <Widget>[
-        if (isMenuFixed(context)) menu,
         Expanded(
           child: Navigator(
             key: navigatorKey,
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                           }
                         })(),
                       ),
-                      drawer: isMenuFixed(context) ? null : menu,
+                      drawer: menu,
                     );
                   },
                   settings: settings);
@@ -96,37 +96,35 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
 // 必要なら別ファイルに分離
 Widget single() {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final User? user = auth.currentUser;
-  final ulength = user!.email!.length - 8;
-  String? uname = user.email!.substring(0, ulength);
+  final User? user = supabase.auth.currentUser;
+  final ulength = user!.email.length - 8;
+  String? uname = user.email.substring(0, ulength);
 
   return Container(
     padding: EdgeInsets.all(30),
     child: Row(children: <Widget>[
-      Text("Hello, $uname !", style: TextStyle(fontSize: 36),)
+      Text(
+        "Hello, $uname !",
+        style: TextStyle(fontSize: 36),
+      )
     ]),
   );
 }
 
 Widget multi() {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final User? user = auth.currentUser;
-  final ulength = user!.email!.length - 8;
-  String? uname = user.email!.substring(0, ulength);
-
-  // 必要かわからない
-  if (uname == "") {
-    uname = "undefined";
-  }
+  final user = supabase.auth.user();
+  final ulength = user!.email.length - 8;
+  String? uname = user.email.substring(0, ulength);
 
   return Container(
     padding: EdgeInsets.all(30),
     child: Row(children: <Widget>[
-      Text("Hello, $uname !", style: TextStyle(fontSize: 36),)
+      Text(
+        "Hello, $uname !",
+        style: TextStyle(fontSize: 36),
+      )
     ]),
   );
 }
@@ -137,7 +135,7 @@ Widget preference() {
       sections: [
         SettingsSection(
           titlePadding: EdgeInsets.all(20),
-          title: 'Section 1',
+          title: 'General',
           tiles: [
             SettingsTile(
               title: 'Language',
@@ -145,23 +143,29 @@ Widget preference() {
               leading: Icon(Icons.language),
               onPressed: (BuildContext context) {},
             ),
+            SettingsTile(
+              title: 'Volume',
+              leading: Icon(Icons.volume_up),
+              onPressed: (BuildContext context) {},
+            ),
           ],
         ),
         SettingsSection(
           titlePadding: EdgeInsets.all(20),
-          title: 'Section 2',
+          title: 'Account',
           tiles: [
             SettingsTile(
-              title: 'Security',
-              subtitle: 'Fingerprint',
+              title: 'Change password',
               leading: Icon(Icons.lock),
               onPressed: (BuildContext context) {},
             ),
-            SettingsTile.switchTile(
-              title: 'Use fingerprint',
-              leading: Icon(Icons.fingerprint),
-              switchValue: true,
-              onToggle: (value) {},
+            SettingsTile(
+              title: 'Logout',
+              leading: Icon(Icons.logout),
+              onPressed: (BuildContext context) async {
+                await supabase.auth.signOut();
+                await Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (BuildContext context) => MyApp(),),ModalRoute.withName('/'));
+              },
             ),
           ],
         ),
