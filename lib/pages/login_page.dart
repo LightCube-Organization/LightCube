@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                               builder: (_) {
                                 return AlertDialog(
                                   title: Text("Forgot password?"),
-                                  content: Text("1. Take a deep breath.\n2. Maintain a calm state\n3. Remember the password"),
+                                  content: Text("1. Take a deep breath\n2. Maintain a calm state\n3. Remember the password"),
                                   actions: <Widget>[
                                     TextButton(
                                       child: Text("OK"),

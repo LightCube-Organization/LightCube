@@ -3,6 +3,7 @@ import 'package:supabase/supabase.dart';
 import 'package:settings_ui/settings_ui.dart';
 import '../main.dart';
 import '../utils/constants.dart';
+import 'single.dart';
 import 'languages.dart';
 
 class HomePage extends StatefulWidget {
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                         child: (() {
                           switch (settings.name!) {
                             case "Single":
-                              return single();
+                              return single(context);
                             case "Multi":
                               return multi();
                             case "Settings":
@@ -97,18 +98,39 @@ class _HomePageState extends State<HomePage> {
 }
 
 // 必要なら別ファイルに分離
-Widget single() {
+Widget single(context) {
   final User? user = supabase.auth.currentUser;
   final ulength = user!.email.length - 8;
   String? uname = user.email.substring(0, ulength);
 
   return Container(
-    padding: EdgeInsets.all(30),
-    child: Row(children: <Widget>[
+    padding: EdgeInsets.only(top: 30),
+    child: Column(children: <Widget>[
       Text(
         "Hello, $uname !",
         style: TextStyle(fontSize: 36),
-      )
+      ),
+      Padding(
+          padding: EdgeInsets.only(top: 30, left: 30),
+          child: Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Single()),
+                );
+              },
+              child: const SizedBox(
+                width: 350,
+                height: 150,
+                child: Padding(
+                    padding: EdgeInsets.only(top: 10, left: 10),
+                    child: Text('Getting Started',
+                        style: TextStyle(fontSize: 24))),
+              ),
+            ),
+          )),
     ]),
   );
 }
@@ -120,7 +142,7 @@ Widget multi() {
 
   return Container(
     padding: EdgeInsets.all(30),
-    child: Row(children: <Widget>[
+    child: Column(children: <Widget>[
       Text(
         "Hello, $uname !",
         style: TextStyle(fontSize: 36),
@@ -158,8 +180,11 @@ Widget preference() {
               leading: Icon(Icons.logout),
               onPressed: (BuildContext context) async {
                 await supabase.auth.signOut();
-                await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                  builder: (BuildContext context) => MyApp(),),
+                await Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => MyApp(),
+                    ),
                     ModalRoute.withName('/'));
               },
             ),
@@ -167,19 +192,18 @@ Widget preference() {
         ),
         CustomSection(
             child: Column(
-              children: [
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.0,
-                    ),
-                    child: Text(
-                      'Version: dev',
-                      style: TextStyle(color: Color(0xFF777777)),
-                    ),
-                ),
-              ],
-            )
-        ),
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              child: Text(
+                'Version: dev',
+                style: TextStyle(color: Color(0xFF777777)),
+              ),
+            ),
+          ],
+        )),
       ],
     ),
   );
