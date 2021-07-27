@@ -4,10 +4,8 @@ import './pages/splash_page.dart';
 import './pages/login_page.dart';
 import './pages/home.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
   Supabase.initialize(
     url: 'https://jcmiulxstrkxxnobczrr.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNzM1ODE3NywiZXhwIjoxOTQyOTM0MTc3fQ.0Q1_hkQoEvn10It4oxK2S8Gst3_rtRxamMOn1Wsb0gc',

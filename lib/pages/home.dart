@@ -3,7 +3,7 @@ import 'package:supabase/supabase.dart';
 import 'package:settings_ui/settings_ui.dart';
 import '../main.dart';
 import '../utils/constants.dart';
-import '../components/auth_state.dart';
+import 'languages.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -141,12 +141,11 @@ Widget preference() {
               title: 'Language',
               subtitle: 'English',
               leading: Icon(Icons.language),
-              onPressed: (BuildContext context) {},
-            ),
-            SettingsTile(
-              title: 'Volume',
-              leading: Icon(Icons.volume_up),
-              onPressed: (BuildContext context) {},
+              onPressed: (context) {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => LanguagesScreen(),
+                ));
+              },
             ),
           ],
         ),
@@ -155,19 +154,31 @@ Widget preference() {
           title: 'Account',
           tiles: [
             SettingsTile(
-              title: 'Change password',
-              leading: Icon(Icons.lock),
-              onPressed: (BuildContext context) {},
-            ),
-            SettingsTile(
               title: 'Logout',
               leading: Icon(Icons.logout),
               onPressed: (BuildContext context) async {
                 await supabase.auth.signOut();
-                await Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (BuildContext context) => MyApp(),),ModalRoute.withName('/'));
+                await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                  builder: (BuildContext context) => MyApp(),),
+                    ModalRoute.withName('/'));
               },
             ),
           ],
+        ),
+        CustomSection(
+            child: Column(
+              children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                    ),
+                    child: Text(
+                      'Version: dev',
+                      style: TextStyle(color: Color(0xFF777777)),
+                    ),
+                ),
+              ],
+            )
         ),
       ],
     ),
