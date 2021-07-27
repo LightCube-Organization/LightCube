@@ -125,14 +125,38 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.all(30),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(Colors.blue),
-                            padding:
-                            MaterialStateProperty.all(EdgeInsets.all(20.0)),
+                            backgroundColor:MaterialStateProperty.all(Colors.blue),
+                            padding:MaterialStateProperty.all(EdgeInsets.all(20.0)),
                           ),
                           child: Text("Submit"),
                           onPressed: validateAndSubmit,
                         )),
+                    Padding(
+                        padding: EdgeInsets.all(30),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            padding:MaterialStateProperty.all(EdgeInsets.all(20.0)),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text("Forgot password?"),
+                                  content: Text("1. Take a deep breath.\n2. Maintain a calm state\n3. Remember the password"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text("OK"),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Text("Forgot password?"),
+                        ),
+                    ),
                   ],
                 ),
               ),
