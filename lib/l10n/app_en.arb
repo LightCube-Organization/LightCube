@@ -22,6 +22,7 @@
   "settings": "Settings",
   "general": "General",
   "lang": "Language",
+  "license": "License",
   "account": "Account",
   "version": "Version",
   "logout": "Logout"

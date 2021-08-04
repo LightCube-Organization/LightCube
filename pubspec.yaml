@@ -33,6 +33,7 @@ dependencies:
   styled_widget: ^0.3.0
   settings_ui: ^1.0.0
   supabase_flutter: ^0.0.6
+  google_fonts: ^2.1.0
 
 
 dev_dependencies:

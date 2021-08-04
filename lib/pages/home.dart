@@ -181,6 +181,18 @@ Widget preference(context) {
                 ));
               },
             ),
+            SettingsTile(
+              title: AppLocalizations.of(context)!.license,
+              leading: Icon(Icons.account_balance),
+              onPressed: (context) {
+                showLicensePage(
+                  context: context,
+                  applicationName: 'LightCube',
+                  applicationVersion: 'dev',
+                  applicationLegalese: '2021 LightCube',
+                );
+              },
+            ),
           ],
         ),
         SettingsSection(
