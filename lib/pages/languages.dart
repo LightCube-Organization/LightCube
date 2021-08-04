@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LanguagesScreen extends StatefulWidget {
   @override
@@ -12,8 +13,11 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (Localizations.localeOf(context).toString() == "ja") {
+      languageIndex = 1;
+    }
     return Scaffold(
-      appBar: AppBar(title: Text('Languages')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.lang)),
       body: SettingsList(
         sections: [
           SettingsSection(tiles: [
@@ -22,10 +26,11 @@ class _LanguagesScreenState extends State<LanguagesScreen> {
               trailing: trailingWidget(0),
               onPressed: (BuildContext context) {
                 changeLanguage(0);
+                // 言語の切り替え方がわからない
               },
             ),
             SettingsTile(
-              title: "Japanese",
+              title: "日本語",
               trailing: trailingWidget(1),
               onPressed: (BuildContext context) {
                 changeLanguage(1);

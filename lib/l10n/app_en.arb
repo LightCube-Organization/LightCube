@@ -1,0 +1,28 @@
+{
+  "@@locale": "en",
+
+  "app_name": "LightCube",
+  "start": "Start learning programming with LightCube",
+  "login": "Login",
+  "register": "Register",
+  "submit": "Submit",
+  "password": "Password",
+  "forgot": "Forgot password?",
+  "remember": "1. Take a deep breath\n2. Maintain a calm state\n3. Remember the password",
+  "provide_value": "Please provide a value.",
+  "id_long": "ID must be longer than 4 characters.",
+  "id_less": "ID must be less than 16 characters.",
+  "id_num": "Only numbers can be used as ID.",
+  "pass_long": "Password must be longer than 6 characters.",
+  "pass_num": "Only numbers can be used as passwords.",
+  "error": "Error",
+  "getting_started": "Getting Started",
+  "single": "Single",
+  "multi": "Multi",
+  "settings": "Settings",
+  "general": "General",
+  "lang": "Language",
+  "account": "Account",
+  "version": "Version",
+  "logout": "Logout"
+}

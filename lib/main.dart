@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import './pages/splash_page.dart';
 import './pages/login_page.dart';
 import './pages/home.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.app_name,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       title: 'LightCube Start Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -33,3 +37,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

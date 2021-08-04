@@ -5,6 +5,7 @@ import '../main.dart';
 import '../utils/constants.dart';
 import 'single.dart';
 import 'languages.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.person),
-                    title: Text("Single"),
+                    title: Text(AppLocalizations.of(context)!.single),
                     onTap: () {
                       // Using navigator key, because the widget is above nested navigator
                       navigatorKey.currentState!
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     leading: Icon(Icons.people),
-                    title: Text("Multi"),
+                    title: Text(AppLocalizations.of(context)!.multi),
                     onTap: () {
                       navigatorKey.currentState!
                           .pushNamedAndRemoveUntil("Multi", (r) => false);
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
-                    title: Text("Settings"),
+                    title: Text(AppLocalizations.of(context)!.settings),
                     onTap: () {
                       navigatorKey.currentState!
                           .pushNamedAndRemoveUntil("Settings", (r) => false);
@@ -79,9 +80,9 @@ class _HomePageState extends State<HomePage> {
                             case "Single":
                               return single(context);
                             case "Multi":
-                              return multi();
+                              return multi(context);
                             case "Settings":
-                              return preference();
+                              return preference(context);
                           }
                         })(),
                       ),
@@ -126,8 +127,11 @@ Widget single(context) {
                 height: 150,
                 child: Padding(
                     padding: EdgeInsets.only(top: 10, left: 10),
-                    child: Text('Getting Started',
-                        style: TextStyle(fontSize: 24))),
+                    child: Text(
+                        'Getting Started',
+                        style: TextStyle(fontSize: 24)
+                    )
+                ),
               ),
             ),
           )),
@@ -135,7 +139,7 @@ Widget single(context) {
   );
 }
 
-Widget multi() {
+Widget multi(context) {
   final user = supabase.auth.user();
   final ulength = user!.email.length - 8;
   String? uname = user.email.substring(0, ulength);
@@ -151,17 +155,25 @@ Widget multi() {
   );
 }
 
-Widget preference() {
+Widget preference(context) {
+
+  String locale = "";
+  if (Localizations.localeOf(context).toString() == "en") {
+    locale = "English";
+  } else {
+    locale = "日本語";
+  }
+
   return Scaffold(
     body: SettingsList(
       sections: [
         SettingsSection(
           titlePadding: EdgeInsets.all(20),
-          title: 'General',
+          title: AppLocalizations.of(context)!.general,
           tiles: [
             SettingsTile(
-              title: 'Language',
-              subtitle: 'English',
+              title: AppLocalizations.of(context)!.lang,
+              subtitle: locale,
               leading: Icon(Icons.language),
               onPressed: (context) {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -173,10 +185,10 @@ Widget preference() {
         ),
         SettingsSection(
           titlePadding: EdgeInsets.all(20),
-          title: 'Account',
+          title: AppLocalizations.of(context)!.account,
           tiles: [
             SettingsTile(
-              title: 'Logout',
+              title: AppLocalizations.of(context)!.logout,
               leading: Icon(Icons.logout),
               onPressed: (BuildContext context) async {
                 await supabase.auth.signOut();
@@ -198,7 +210,7 @@ Widget preference() {
                 vertical: 20.0,
               ),
               child: Text(
-                'Version: dev',
+                AppLocalizations.of(context)!.version + ': dev',
                 style: TextStyle(color: Color(0xFF777777)),
               ),
             ),

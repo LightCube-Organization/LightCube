@@ -1,0 +1,28 @@
+{
+  "@@locale": "ja",
+
+  "app_name": "LightCube",
+  "start": "LightCubeでプログラミング学習を開始",
+  "login": "ログイン",
+  "register": "登録",
+  "submit": "送信",
+  "password": "パスワード",
+  "forgot": "パスワードをお忘れですか？",
+  "remember": "1. 深呼吸をする\n2. 落ち着いた状態を保つ\n3. パスワードを思い出す",
+  "provide_value": "値を入力してください。",
+  "id_long": "IDは4文字以上である必要があります。",
+  "id_less": "IDは16文字以下である必要があります。",
+  "id_num": "IDは数字のみ使用できます。",
+  "pass_long": "パスワードは6文字以上である必要があります。",
+  "pass_num": "パスワードは数字のみ使用できます。",
+  "error": "エラー",
+  "getting_started": "はじめに",
+  "single": "シングル",
+  "multi": "マルチ",
+  "settings": "設定",
+  "general": "一般",
+  "lang": "言語",
+  "account": "アカウント",
+  "version": "バージョン",
+  "logout": "ログアウト"
+}

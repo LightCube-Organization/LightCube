@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import '../utils/constants.dart';
 import './home.dart';
 
@@ -20,13 +22,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
 
-    // ページロード時にログイン判定を追加、ログイン状態ならhome.dartに移動
-
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: Text("LightCubeでプログラミング学習を開始"),
+          title: Text(AppLocalizations.of(context)!.start),
         ),
         body: Container(
             margin: EdgeInsets.symmetric(
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: 400.0),
                             child: RadioListTile<FormType>(
-                              title: Text("Login"),
+                              title: Text(AppLocalizations.of(context)!.login),
                               activeColor: Colors.blue,
                               value: FormType.login,
                               groupValue: _formType,
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: 400.0),
                             child: RadioListTile<FormType>(
-                              title: Text("Register"),
+                              title: Text(AppLocalizations.of(context)!.register),
                               activeColor: Colors.blue,
                               value: FormType.register,
                               groupValue: _formType,
@@ -74,16 +74,16 @@ class _LoginPageState extends State<LoginPage> {
                               textInputAction: TextInputAction.next,
                               validator: (value) {
                                 if (isEmpty(value!)) {
-                                  return 'Please provide a value.';
+                                  return AppLocalizations.of(context)!.provide_value;
                                 }
                                 if (value.length <= 4) {
-                                  return 'ID must be longer than 4 characters.';
+                                  return AppLocalizations.of(context)!.id_long;
                                 }
                                 if (16 < value.length) {
-                                  return 'ID must be less than 16 characters.';
+                                  return AppLocalizations.of(context)!.id_less;
                                 }
                                 if (int.tryParse(value) == null) {
-                                  return 'Only numbers can be used as ID.';
+                                  return AppLocalizations.of(context)!.id_num;
                                 }
                                 return null;
                               },
@@ -109,13 +109,13 @@ class _LoginPageState extends State<LoginPage> {
                           textInputAction: TextInputAction.done,
                           validator: (value) {
                             if (isEmpty(value!)) {
-                              return 'Please provide a value.';
+                              return AppLocalizations.of(context)!.provide_value;
                             }
                             if (value.length <= 6) {
-                              return 'Password must be longer than 6 characters.';
+                              return AppLocalizations.of(context)!.pass_long;
                             }
                             if (int.tryParse(value) == null) {
-                              return 'Only numbers can be used as passwords.';
+                              return AppLocalizations.of(context)!.pass_num;
                             }
                             return null;
                           },
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                             backgroundColor:MaterialStateProperty.all(Colors.blue),
                             padding:MaterialStateProperty.all(EdgeInsets.all(20.0)),
                           ),
-                          child: Text("Submit"),
+                          child: Text(AppLocalizations.of(context)!.submit),
                           onPressed: validateAndSubmit,
                         )),
                     Padding(
@@ -142,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                               context: context,
                               builder: (_) {
                                 return AlertDialog(
-                                  title: Text("Forgot password?"),
-                                  content: Text("1. Take a deep breath\n2. Maintain a calm state\n3. Remember the password"),
+                                  title: Text(AppLocalizations.of(context)!.forgot),
+                                  content: Text(AppLocalizations.of(context)!.remember),
                                   actions: <Widget>[
                                     TextButton(
                                       child: Text("OK"),
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             );
                           },
-                          child: Text("Forgot password?"),
+                          child: Text(AppLocalizations.of(context)!.forgot),
                         ),
                     ),
                   ],
@@ -199,7 +199,21 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage()),(_) => false);
         }
       } catch (e) {
-        print('Error: $e');
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.error),
+              content: Text("$e"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          },
+        );
       }
     }
   }
