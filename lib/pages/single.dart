@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class Single extends StatelessWidget {
   @override
@@ -7,13 +6,26 @@ class Single extends StatelessWidget {
     return MaterialApp(
         title: "Single Play",
         home: Scaffold(
-          appBar: AppBar(
-            title: Text('LightCube'),
-          ),
-          body: Container(
-            child: Column(
-              children: <Widget>[
-                Container(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Text('LightCube'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.play_arrow),
+                  onPressed: () => {},
+                ),
+                IconButton(
+                  icon: Icon(Icons.stop),
+                  onPressed: () => {},
+                ),
+              ],
+            ),
+            body: Container(
+                child: Column(children: <Widget>[
+              Container(
                   width: MediaQuery.of(context).size.width,
                   // 56はAppBarの高さ
                   height: (MediaQuery.of(context).size.height - 56) * 0.6,
@@ -22,34 +34,52 @@ class Single extends StatelessWidget {
                   ),
                   child: CustomPaint(
                     painter: _MainPainter(),
-                  )
-                ),
-                Row(
-                  children: [
-                    Container(
+                  )),
+              Row(
+                children: [
+                  Container(
                       width: MediaQuery.of(context).size.width * 0.3,
                       height: (MediaQuery.of(context).size.height - 56) * 0.4,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                       ),
-                        child: CustomPaint(
-                          painter: _SelectPainter(),
-                        )
+                      child: GridView.extent(
+                          // よくわからない
+                          maxCrossAxisExtent: 200,
+                          padding: const EdgeInsets.all(20),
+                          childAspectRatio: 1.75,
+                          children: [
+                            Container(
+                                child: CustomPaint(
+                              painter: _Diamond(),
+                            )),
+                            Container(
+                                child: CustomPaint(
+                              painter: _Square(),
+                            )),
+                            Container(
+                                child: CustomPaint(
+                              painter: _LoopStart(),
+                            )),
+                            Container(
+                                child: CustomPaint(
+                              painter: _LoopEnd(),
+                            )),
+                            Container(
+                                child: CustomPaint(
+                              painter: _Oval(),
+                            )),
+                          ])),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    height: (MediaQuery.of(context).size.height - 56) * 0.4,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      height: (MediaQuery.of(context).size.height - 56) * 0.4,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                      ),
-                    ),
-                  ],
-                )
-              ]
-            )
-          )
-        )
-    );
+                  ),
+                ],
+              )
+            ]))));
   }
 }
 
@@ -62,29 +92,42 @@ class _MainPainter extends CustomPainter {
       ..strokeWidth = 140;
 
     // 道路と枠線
-    canvas.drawLine(Offset(size.width / 2 , 0),Offset(size.width / 2, size.height),paint);
-    canvas.drawLine(Offset(0, size.height / 2),Offset(size.width, size.height / 2),paint);
+    canvas.drawLine(
+        Offset(size.width / 2, 0), Offset(size.width / 2, size.height), paint);
+    canvas.drawLine(
+        Offset(0, size.height / 2), Offset(size.width, size.height / 2), paint);
     paint.color = Colors.grey;
     paint.strokeWidth = 10;
-    canvas.drawLine(Offset(size.width / 2 - 75 , 0),Offset(size.width / 2 - 75, size.height / 2 - 70),paint);
-    canvas.drawLine(Offset(size.width / 2 - 75 , size.height / 2 + 70),Offset(size.width / 2 - 75, size.height),paint);
-    canvas.drawLine(Offset(size.width / 2 + 75 , 0),Offset(size.width / 2 + 75, size.height / 2 - 70),paint);
-    canvas.drawLine(Offset(size.width / 2 + 75 , size.height / 2 + 70),Offset(size.width / 2 + 75, size.height),paint);
-    canvas.drawLine(Offset(0 , size.height / 2 - 75),Offset(size.width / 2 - 75, size.height / 2 - 75),paint);
-    canvas.drawLine(Offset(size.width / 2 + 75 , size.height / 2 - 75),Offset(size.width, size.height / 2 - 75),paint);
-    canvas.drawLine(Offset(0 , size.height / 2 + 75),Offset(size.width / 2 - 75, size.height / 2 + 75),paint);
-    canvas.drawLine(Offset(size.width / 2 + 75 , size.height / 2 + 75),Offset(size.width, size.height / 2 + 75),paint);
+    canvas.drawLine(Offset(size.width / 2 - 75, 0),
+        Offset(size.width / 2 - 75, size.height / 2 - 70), paint);
+    canvas.drawLine(Offset(size.width / 2 - 75, size.height / 2 + 70),
+        Offset(size.width / 2 - 75, size.height), paint);
+    canvas.drawLine(Offset(size.width / 2 + 75, 0),
+        Offset(size.width / 2 + 75, size.height / 2 - 70), paint);
+    canvas.drawLine(Offset(size.width / 2 + 75, size.height / 2 + 70),
+        Offset(size.width / 2 + 75, size.height), paint);
+    canvas.drawLine(Offset(0, size.height / 2 - 75),
+        Offset(size.width / 2 - 75, size.height / 2 - 75), paint);
+    canvas.drawLine(Offset(size.width / 2 + 75, size.height / 2 - 75),
+        Offset(size.width, size.height / 2 - 75), paint);
+    canvas.drawLine(Offset(0, size.height / 2 + 75),
+        Offset(size.width / 2 - 75, size.height / 2 + 75), paint);
+    canvas.drawLine(Offset(size.width / 2 + 75, size.height / 2 + 75),
+        Offset(size.width, size.height / 2 + 75), paint);
     paint.color = Colors.white;
     paint.strokeWidth = 5;
-    canvas.drawLine(Offset(size.width / 2 , 0),Offset(size.width / 2, size.height),paint);
-    canvas.drawLine(Offset(0, size.height / 2),Offset(size.width, size.height / 2),paint);
+    canvas.drawLine(
+        Offset(size.width / 2, 0), Offset(size.width / 2, size.height), paint);
+    canvas.drawLine(
+        Offset(0, size.height / 2), Offset(size.width, size.height / 2), paint);
     paint.color = Colors.black;
-    canvas.drawRect(Rect.fromLTWH(size.width / 2 - 70, size.height / 2 - 70, 140, 140), paint);
+    canvas.drawRect(
+        Rect.fromLTWH(size.width / 2 - 70, size.height / 2 - 70, 140, 140),
+        paint);
     paint.color = Colors.blue;
 
     // 車
     canvas.drawRect(Rect.fromLTWH(0, size.height / 2 - 60, 70, 50), paint);
-
   }
 
   @override
@@ -93,13 +136,11 @@ class _MainPainter extends CustomPainter {
   }
 }
 
-class _SelectPainter extends CustomPainter {
-
+class _Diamond extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
     paint.color = Colors.orange;
-    paint.strokeWidth = 1.0;
 
     // 枠だけにする場合はこれ
     //paint.style = PaintingStyle.stroke;
@@ -107,99 +148,160 @@ class _SelectPainter extends CustomPainter {
     // 菱形
     final diamond = Path()
       ..moveTo(
-        20,
-        60,
-      )
-      ..lineTo(
-        95,
-        20,
-      )
-      ..lineTo(
-        170,
-        60,
-      )
-      ..lineTo(
-        95,
-        100,
-      )
-      ..lineTo(
-        20,
-        60,
-      );
-    canvas.drawPath(diamond, paint);
-
-    // 四角形
-    paint.color = Colors.teal;
-    canvas.drawRect(Rect.fromLTWH(210, 30, 150, 50), paint);
-
-    // 繰り返しの初めのほうのやつ
-    paint.color = Colors.deepOrange;
-    final start = Path()
-      ..moveTo(
+        0,
         40,
-        120,
       )
       ..lineTo(
-        20,
-        140,
-      )
-      ..lineTo(
-        20,
-        170,
-      )
-      ..lineTo(
-        170,
-        170,
-      )
-      ..lineTo(
-        170,
-        140,
+        75,
+        0,
       )
       ..lineTo(
         150,
-        120,
+        40,
       )
       ..lineTo(
+        75,
+        80,
+      )
+      ..lineTo(
+        0,
         40,
-        120,
+      );
+    canvas.drawPath(diamond, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class _Square extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = Colors.teal;
+
+    // 枠だけにする場合はこれ
+    //paint.style = PaintingStyle.stroke;
+
+    // 四角形
+    canvas.drawRect(Rect.fromLTWH(0, 0, 150, 50), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class _LoopStart extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = Colors.deepOrange;
+
+    // 枠だけにする場合はこれ
+    //paint.style = PaintingStyle.stroke;
+
+    // 繰り返しの初めのほうのやつ
+    final start = Path()
+      ..moveTo(
+        20,
+        0,
+      )
+      ..lineTo(
+        0,
+        20,
+      )
+      ..lineTo(
+        0,
+        50,
+      )
+      ..lineTo(
+        150,
+        50,
+      )
+      ..lineTo(
+        150,
+        20,
+      )
+      ..lineTo(
+        130,
+        0,
+      )
+      ..lineTo(
+        20,
+        0,
       );
     canvas.drawPath(start, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class _LoopEnd extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = Colors.deepOrange;
+
+    // 枠だけにする場合はこれ
+    //paint.style = PaintingStyle.stroke;
 
     // 繰り返しの終わりのほうのやつ
     final end = Path()
       ..moveTo(
-        210,
-        120,
+        0,
+        0,
       )
       ..lineTo(
-        210,
+        0,
+        30,
+      )
+      ..lineTo(
+        20,
+        50,
+      )
+      ..lineTo(
+        130,
+        50,
+      )
+      ..lineTo(
         150,
+        30,
       )
       ..lineTo(
-        230,
-        170,
-      )
-      ..lineTo(
-        340,
-        170,
-      )
-      ..lineTo(
-        360,
         150,
+        0,
       )
       ..lineTo(
-        360,
-        120,
-      )
-      ..lineTo(
-        210,
-        120,
+        0,
+        0,
       );
     canvas.drawPath(end, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class _Oval extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = Colors.lightBlue;
+
+    // 枠だけにする場合はこれ
+    //paint.style = PaintingStyle.stroke;
 
     // 楕円
-    paint.color = Colors.lightBlue;
-    canvas.drawOval(Rect.fromLTWH(20, 200, 150, 60), paint);
+    canvas.drawOval(Rect.fromLTWH(0, 0, 150, 60), paint);
   }
 
   @override

@@ -115,11 +115,11 @@ Widget single(context) {
           child: Card(
             child: InkWell(
               splashColor: Colors.blue.withAlpha(30),
-              onTap: () {
+              onTap: () => {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Single()),
-                );
+                )
               },
               child: const SizedBox(
                 width: 350,
