@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:graphite/core/matrix.dart';
+import 'package:graphite/core/typings.dart';
+import 'package:graphite/graphite.dart';
 
-class Single extends StatelessWidget {
+const flowchart =
+    '[{"id":"A","next":["B"]},{"id":"B","next":["C","D","E"]},'
+    '{"id":"C","next":["F"]},{"id":"D","next":["J"]},{"id":"E","next":["J"]},'
+    '{"id":"J","next":["I"]},{"id":"I","next":["H"]},{"id":"F","next":["K"]},'
+    '{"id":"K","next":["L"]},{"id":"H","next":["L"]},{"id":"L","next":["P"]},'
+    '{"id":"P","next":["M","N"]},{"id":"M","next":[]},{"id":"N","next":[]}]';
+
+class Sample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var viewchart = nodeInputFromJson(flowchart);
     return MaterialApp(
         title: "Single Play",
         home: Scaffold(
@@ -13,13 +24,19 @@ class Single extends StatelessWidget {
               ),
               title: Text('LightCube'),
               actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.play_arrow),
-                  onPressed: () => {},
+                Padding(
+                  padding: EdgeInsets.only(right:10),
+                  child: IconButton(
+                    icon: Icon(Icons.play_arrow),
+                    onPressed: () => {},
+                  )
                 ),
-                IconButton(
-                  icon: Icon(Icons.stop),
-                  onPressed: () => {},
+                Padding(
+                    padding: EdgeInsets.only(right:10),
+                    child: IconButton(
+                      icon: Icon(Icons.stop),
+                      onPressed: () => {},
+                    )
                 ),
               ],
             ),
@@ -75,6 +92,14 @@ class Single extends StatelessWidget {
                     height: (MediaQuery.of(context).size.height - 56) * 0.4,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
+                    ),
+                    child: Container(
+                      child: DirectGraph(
+                        list: viewchart,
+                        cellWidth: 130.0,
+                        cellPadding: 24.0,
+                        orientation: MatrixOrientation.Vertical,
+                      ),
                     ),
                   ),
                 ],

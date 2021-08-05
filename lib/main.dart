@@ -5,7 +5,7 @@ import './pages/splash_page.dart';
 import './pages/login_page.dart';
 import './pages/home.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 void main() {
@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'LightCube Start Page',
       theme: ThemeData(
-        textTheme: GoogleFonts.sawarabiGothicTextTheme(),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

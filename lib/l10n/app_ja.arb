@@ -24,6 +24,9 @@
   "lang": "言語",
   "license": "ライセンス",
   "account": "アカウント",
+  "profile": "プロフィール",
+  "del_account": "アカウントを削除",
+  "confirm": "アカウントを削除してもよろしいですか？",
   "version": "バージョン",
   "logout": "ログアウト"
 }

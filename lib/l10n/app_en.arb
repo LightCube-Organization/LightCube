@@ -24,6 +24,9 @@
   "lang": "Language",
   "license": "License",
   "account": "Account",
+  "profile": "Profile",
+  "del_account": "Delete account",
+  "confirm": "Are you sure you want to delete your account?",
   "version": "Version",
   "logout": "Logout"
 }

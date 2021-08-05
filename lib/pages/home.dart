@@ -3,7 +3,7 @@ import 'package:supabase/supabase.dart';
 import 'package:settings_ui/settings_ui.dart';
 import '../main.dart';
 import '../utils/constants.dart';
-import 'single.dart';
+import 'sample.dart';
 import 'languages.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
+  String uname = getUsername();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -37,24 +39,21 @@ class _HomePageState extends State<HomePage> {
                     title: Text(AppLocalizations.of(context)!.single),
                     onTap: () {
                       // Using navigator key, because the widget is above nested navigator
-                      navigatorKey.currentState!
-                          .pushNamedAndRemoveUntil("Single", (r) => false);
+                      navigatorKey.currentState!.pushNamed("Single");
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.people),
                     title: Text(AppLocalizations.of(context)!.multi),
                     onTap: () {
-                      navigatorKey.currentState!
-                          .pushNamedAndRemoveUntil("Multi", (r) => false);
+                      navigatorKey.currentState!.pushNamed("Multi");
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
                     title: Text(AppLocalizations.of(context)!.settings),
                     onTap: () {
-                      navigatorKey.currentState!
-                          .pushNamedAndRemoveUntil("Settings", (r) => false);
+                      navigatorKey.currentState!.pushNamed("Settings");
                     },
                   ),
                 ],
@@ -73,6 +72,22 @@ class _HomePageState extends State<HomePage> {
                     return Scaffold(
                       appBar: AppBar(
                         title: Text(settings.name!),
+                        actions: <Widget>[
+                          Icon(
+                            Icons.account_circle,
+                            size: 32,
+                          ),
+                          Center(
+                              child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              uname,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ))
+                        ],
                       ),
                       body: Container(
                         child: (() {
@@ -98,11 +113,15 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// 必要なら別ファイルに分離
-Widget single(context) {
+String getUsername() {
   final User? user = supabase.auth.currentUser;
   final ulength = user!.email.length - 8;
-  String? uname = user.email.substring(0, ulength);
+  return user.email.substring(0, ulength);
+}
+
+// 必要なら別ファイルに分離
+Widget single(context) {
+  String uname = getUsername();
 
   return Container(
     padding: EdgeInsets.only(top: 30),
@@ -112,26 +131,23 @@ Widget single(context) {
         style: TextStyle(fontSize: 36),
       ),
       Padding(
-          padding: EdgeInsets.only(top: 30, left: 30),
+          padding: EdgeInsets.only(top: 30, left: 30, right:30),
           child: Card(
             child: InkWell(
               splashColor: Colors.blue.withAlpha(30),
               onTap: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Single()),
+                  MaterialPageRoute(builder: (context) => Sample()),
                 )
               },
-              child: const SizedBox(
+              child: SizedBox(
                 width: 350,
                 height: 150,
                 child: Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
-                    child: Text(
-                        'Getting Started',
-                        style: TextStyle(fontSize: 24)
-                    )
-                ),
+                    padding: EdgeInsets.only(top: 10, left: 10, right:10),
+                    child: Text(AppLocalizations.of(context)!.getting_started,
+                        style: TextStyle(fontSize: 24))),
               ),
             ),
           )),
@@ -140,23 +156,103 @@ Widget single(context) {
 }
 
 Widget multi(context) {
-  final user = supabase.auth.user();
-  final ulength = user!.email.length - 8;
-  String? uname = user.email.substring(0, ulength);
-
-  return Container(
-    padding: EdgeInsets.all(30),
+  // DataTablesを使うと良くなるかもしれない
+  // https://github.com/rodydavis/data_tables
+  return FittedBox(
     child: Column(children: <Widget>[
-      Text(
-        "Hello, $uname !",
-        style: TextStyle(fontSize: 36),
-      )
+      Container(
+          padding: EdgeInsets.only(top: 10),
+          child:Text(
+              "Join the server",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 24),
+          )
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 30, left: 30, right:30),
+        child: DataTable(
+          columns: <DataColumn>[
+            DataColumn(
+              label: Text(
+                'Server name',
+                style: TextStyle(),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Owner',
+                style: TextStyle(),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Join',
+                style: TextStyle(),
+              ),
+            ),
+          ],
+          rows: <DataRow>[
+            DataRow(
+              cells: <DataCell>[
+                DataCell(
+                    Container(
+                      width: MediaQuery.of(context).size.width / 10 * 3 - 90,
+                      child:Text('Sample Server 1')
+                    )
+                ),
+                DataCell(
+                    Container(
+                        width: MediaQuery.of(context).size.width / 10 * 5 - 90,
+                        child:Text('John Doe')
+                    )
+                ),
+                DataCell(
+                  Container(
+                    width: MediaQuery.of(context).size.width /10 * 2 - 90,
+                    child: IconButton(
+                      onPressed: () => {},
+                      icon: Icon(Icons.login),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            DataRow(
+              cells: <DataCell>[
+                DataCell(Text('Sample Server 2')),
+                DataCell(Text('John Doe')),
+                DataCell(
+                  Center(
+                    child: IconButton(
+                      onPressed: () => {},
+                      icon: Icon(Icons.login),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            DataRow(
+              cells: <DataCell>[
+                DataCell(Text('Sample Server 3')),
+                DataCell(Text('John Doe')),
+                DataCell(
+                  Center(
+                    child: IconButton(
+                        onPressed: () => {},
+                        icon: Icon(Icons.login),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     ]),
   );
 }
 
 Widget preference(context) {
-
   String locale = "";
   if (Localizations.localeOf(context).toString() == "en") {
     locale = "English";
@@ -200,6 +296,11 @@ Widget preference(context) {
           title: AppLocalizations.of(context)!.account,
           tiles: [
             SettingsTile(
+              title: AppLocalizations.of(context)!.profile,
+              leading: Icon(Icons.person),
+              onPressed: (BuildContext context) => {},
+            ),
+            SettingsTile(
               title: AppLocalizations.of(context)!.logout,
               leading: Icon(Icons.logout),
               onPressed: (BuildContext context) async {
@@ -210,6 +311,35 @@ Widget preference(context) {
                       builder: (BuildContext context) => MyApp(),
                     ),
                     ModalRoute.withName('/'));
+              },
+            ),
+            SettingsTile(
+              title: AppLocalizations.of(context)!.del_account,
+              leading: Icon(Icons.delete),
+              onPressed: (BuildContext context) {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.del_account),
+                        content: Text(AppLocalizations.of(context)!.confirm),
+                        actions: <Widget>[
+                          TextButton(
+                            // ダイアログを閉じる処理
+                            child: Text("Cancel"),
+                            onPressed: () {
+                              // なぜか閉じず前の画面に戻る
+                              //Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            // アカウントを削除する処理（Supabaseの秘密APIキーが必要）
+                            child: Text("OK"),
+                            onPressed: () {},
+                          ),
+                        ]);
+                  },
+                );
               },
             ),
           ],
