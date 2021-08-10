@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flame/game.dart';
+import 'package:flame/layers.dart';
+import 'package:flame/components.dart';
 import 'package:graphite/core/matrix.dart';
 import 'package:graphite/core/typings.dart';
 import 'package:graphite/graphite.dart';
 
+// JSONで渡す、minifyしないとStringで取得できない
 const flowchart =
-    '[{"id":"A","next":["B"]},{"id":"B","next":["C","D","E"]},'
-    '{"id":"C","next":["F"]},{"id":"D","next":["J"]},{"id":"E","next":["J"]},'
-    '{"id":"J","next":["I"]},{"id":"I","next":["H"]},{"id":"F","next":["K"]},'
-    '{"id":"K","next":["L"]},{"id":"H","next":["L"]},{"id":"L","next":["P"]},'
-    '{"id":"P","next":["M","N"]},{"id":"M","next":[]},{"id":"N","next":[]}]';
+    '[{"id":"Start","next":["Red A 5sec"]},{"id":"Red A 5sec","next":["Green A 5sec"]},{"id":"Green A 5sec","next":["End"]},{"id":"End","next":[]}]';
 
 class Sample extends StatelessWidget {
+  final myGame = MyGame();
+
   @override
   Widget build(BuildContext context) {
     var viewchart = nodeInputFromJson(flowchart);
@@ -43,15 +45,15 @@ class Sample extends StatelessWidget {
             body: Container(
                 child: Column(children: <Widget>[
               Container(
-                  width: MediaQuery.of(context).size.width,
-                  // 56はAppBarの高さ
-                  height: (MediaQuery.of(context).size.height - 56) * 0.6,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: CustomPaint(
-                    painter: _MainPainter(),
-                  )),
+                width: MediaQuery.of(context).size.width,
+                height:(MediaQuery.of(context).size.height - 56) * 0.6,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: GameWidget(
+                  game: myGame,
+                ),
+              ),
               Row(
                 children: [
                   Container(
@@ -108,57 +110,78 @@ class Sample extends StatelessWidget {
   }
 }
 
-class _MainPainter extends CustomPainter {
-  //雑描画
+class MyGame extends Game {
+  static const int squareSpeed = 400;
+  static final squarePaint = Paint()..color = Colors.lightBlue;
+  late Rect squarePos;
+  late Layer gameLayer;
+  int squareDirection = 1;
+
+  // 四角形（車）初期位置
   @override
-  void paint(Canvas canvas, Size size) {
+  Future<void> onLoad() async {
+    squarePos = Rect.fromLTWH(0, size.y / 2 - 60, 70, 50);
+  }
+
+  // 動く四角形の速度
+  @override
+  void update(double dt) {
+    squarePos = squarePos.translate(squareSpeed * squareDirection * dt, 0);
+    if (squareDirection == 1 && squarePos.right > size.x) {
+      squareDirection = -1;
+    } else if (squareDirection == -1 && squarePos.left < 0) {
+      squareDirection = 1;
+    }
+  }
+
+  @override
+  void render(Canvas canvas) {
     final paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 140;
 
     // 道路と枠線
     canvas.drawLine(
-        Offset(size.width / 2, 0), Offset(size.width / 2, size.height), paint);
+        Offset(size.x / 2, 0), Offset(size.x / 2, size.y), paint);
     canvas.drawLine(
-        Offset(0, size.height / 2), Offset(size.width, size.height / 2), paint);
+        Offset(0, size.y / 2), Offset(size.x, size.y / 2), paint);
     paint.color = Colors.grey;
     paint.strokeWidth = 10;
-    canvas.drawLine(Offset(size.width / 2 - 75, 0),
-        Offset(size.width / 2 - 75, size.height / 2 - 70), paint);
-    canvas.drawLine(Offset(size.width / 2 - 75, size.height / 2 + 70),
-        Offset(size.width / 2 - 75, size.height), paint);
-    canvas.drawLine(Offset(size.width / 2 + 75, 0),
-        Offset(size.width / 2 + 75, size.height / 2 - 70), paint);
-    canvas.drawLine(Offset(size.width / 2 + 75, size.height / 2 + 70),
-        Offset(size.width / 2 + 75, size.height), paint);
-    canvas.drawLine(Offset(0, size.height / 2 - 75),
-        Offset(size.width / 2 - 75, size.height / 2 - 75), paint);
-    canvas.drawLine(Offset(size.width / 2 + 75, size.height / 2 - 75),
-        Offset(size.width, size.height / 2 - 75), paint);
-    canvas.drawLine(Offset(0, size.height / 2 + 75),
-        Offset(size.width / 2 - 75, size.height / 2 + 75), paint);
-    canvas.drawLine(Offset(size.width / 2 + 75, size.height / 2 + 75),
-        Offset(size.width, size.height / 2 + 75), paint);
+    canvas.drawLine(Offset(size.x / 2 - 75, 0),
+        Offset(size.x / 2 - 75, size.y / 2 - 70), paint);
+    canvas.drawLine(Offset(size.x / 2 - 75, size.y / 2 + 70),
+        Offset(size.x / 2 - 75, size.y), paint);
+    canvas.drawLine(Offset(size.x / 2 + 75, 0),
+        Offset(size.x / 2 + 75, size.y / 2 - 70), paint);
+    canvas.drawLine(Offset(size.x / 2 + 75, size.y / 2 + 70),
+        Offset(size.x / 2 + 75, size.y), paint);
+    canvas.drawLine(Offset(0, size.y / 2 - 75),
+        Offset(size.x / 2 - 75, size.y / 2 - 75), paint);
+    canvas.drawLine(Offset(size.x / 2 + 75, size.y / 2 - 75),
+        Offset(size.x, size.y / 2 - 75), paint);
+    canvas.drawLine(Offset(0, size.y / 2 + 75),
+        Offset(size.x / 2 - 75, size.y / 2 + 75), paint);
+    canvas.drawLine(Offset(size.x / 2 + 75, size.y / 2 + 75),
+        Offset(size.x, size.y / 2 + 75), paint);
     paint.color = Colors.white;
     paint.strokeWidth = 5;
     canvas.drawLine(
-        Offset(size.width / 2, 0), Offset(size.width / 2, size.height), paint);
+        Offset(size.x / 2, 0), Offset(size.x / 2, size.y), paint);
     canvas.drawLine(
-        Offset(0, size.height / 2), Offset(size.width, size.height / 2), paint);
+        Offset(0, size.y / 2), Offset(size.x, size.y / 2), paint);
     paint.color = Colors.black;
     canvas.drawRect(
-        Rect.fromLTWH(size.width / 2 - 70, size.height / 2 - 70, 140, 140),
+        Rect.fromLTWH(size.x / 2 - 70, size.y / 2 - 70, 140, 140),
         paint);
-    paint.color = Colors.blue;
 
-    // 車
-    canvas.drawRect(Rect.fromLTWH(0, size.height / 2 - 60, 70, 50), paint);
+    // 四角形
+    canvas.drawRect(squarePos, squarePaint);
   }
 
+
+  // 背景色
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  Color backgroundColor() => const Color(0xFFFFFF);
 }
 
 class _Diamond extends CustomPainter {
