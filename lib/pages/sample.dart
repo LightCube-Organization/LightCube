@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/layers.dart';
-import 'package:flame/components.dart';
 import 'package:graphite/core/matrix.dart';
 import 'package:graphite/core/typings.dart';
 import 'package:graphite/graphite.dart';
 
+// 初期化、停止
+int squareXDirection = 0;
+int squareYDirection = 0;
+late Rect squareX;
+late Rect squareY;
+
 // JSONで渡す、minifyしないとStringで取得できない
 const flowchart =
-    '[{"id":"Start","next":["Red A 5sec"]},{"id":"Red A 5sec","next":["Green A 5sec"]},{"id":"Green A 5sec","next":["End"]},{"id":"End","next":[]}]';
+    '[{"id":"Start","next":["red(A,5sec)"]},{"id":"red(A,5sec)","next":["green(A,5sec)"]},{"id":"green(A,5sec)","next":["End"]},{"id":"End","next":[]}]';
 
 class Sample extends StatelessWidget {
   final myGame = MyGame();
@@ -30,14 +35,23 @@ class Sample extends StatelessWidget {
                   padding: EdgeInsets.only(right:10),
                   child: IconButton(
                     icon: Icon(Icons.play_arrow),
-                    onPressed: () => {},
+                    onPressed: () => {
+                      squareXDirection = 1,
+                      squareYDirection = 1
+                    },
                   )
                 ),
                 Padding(
                     padding: EdgeInsets.only(right:10),
                     child: IconButton(
                       icon: Icon(Icons.stop),
-                      onPressed: () => {},
+                      onPressed: () => {
+                        // 初期化（速度0, 図形を元の位置）
+                        squareXDirection = 0,
+                        squareYDirection = 0,
+                        squareX = Rect.fromLTWH(0, (MediaQuery.of(context).size.height - 56) * 0.6 / 2 - 60, 70, 50),
+                        squareY = Rect.fromLTWH(MediaQuery.of(context).size.width / 2 + 10, 0, 50, 70)
+                      },
                     )
                 ),
               ],
@@ -111,29 +125,65 @@ class Sample extends StatelessWidget {
 }
 
 class MyGame extends Game {
+
+  // Gameウィジェットのsizeはウィジェットのサイズを取得
+  // ウィジェットのサイズはMediaQueryで
+  // 幅：　MediaQuery.of(context).size.width
+  // 高さ：(MediaQuery.of(context).size.height - 56) * 0.6 / 2
+
   static const int squareSpeed = 400;
   static final squarePaint = Paint()..color = Colors.lightBlue;
-  late Rect squarePos;
   late Layer gameLayer;
-  int squareDirection = 1;
 
-  // 四角形（車）初期位置
-  @override
-  Future<void> onLoad() async {
-    squarePos = Rect.fromLTWH(0, size.y / 2 - 60, 70, 50);
+  // ゲームオーバー時のダイアログ、動作未確認
+  void gameOver(BuildContext context) {
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: const Text(
+            'Message',
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  // 動く四角形の速度
+  // 初期指定
+  @override
+  Future<void> onLoad() async {
+    squareX = Rect.fromLTWH(0, size.y / 2 - 60, 70, 50);
+    squareY = Rect.fromLTWH(size.x / 2 + 10, 0, 50, 70);
+  }
+
+  // フレーム毎呼び出し
   @override
   void update(double dt) {
-    squarePos = squarePos.translate(squareSpeed * squareDirection * dt, 0);
-    if (squareDirection == 1 && squarePos.right > size.x) {
-      squareDirection = -1;
-    } else if (squareDirection == -1 && squarePos.left < 0) {
-      squareDirection = 1;
+    squareX = squareX.translate(squareSpeed * squareXDirection * dt, 0);
+    squareY = squareY.translate(0, squareSpeed * squareYDirection * dt);
+    if (squareY.bottom > size.y) {
+      squareY = Rect.fromLTWH(0, 0, 0, 0);
+    }
+
+    // 当たり判定わからん
+    if (squareX.center == squareY.center) {
+      @override
+      Widget build(BuildContext context) {
+        Future.delayed(Duration.zero, () => gameOver(context));
+        return Scaffold();
+      }
     }
   }
 
+  // 描画
   @override
   void render(Canvas canvas) {
     final paint = Paint()
@@ -175,7 +225,10 @@ class MyGame extends Game {
         paint);
 
     // 四角形
-    canvas.drawRect(squarePos, squarePaint);
+    canvas.drawRect(squareX, squarePaint);
+
+    // 四角形
+    canvas.drawRect(squareY, squarePaint);
   }
 
 
